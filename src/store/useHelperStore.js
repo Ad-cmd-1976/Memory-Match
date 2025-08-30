@@ -4,15 +4,16 @@ export const useHelperStore=create((set,get)=>({
     cards:[],
     flipped:[],
     moves:0,
-    timer:0,
+    timer: 30,
     best: 0,
     game: "idle",
+    intervalId: null,
     setGame: (state)=>set({ game: state}),
-    resetTimerAndMoves: ()=>set({ timer: 0, moves:0 }),
+    resetTimerAndMoves: ()=>set({ timer: 30, moves:0 }),
 
     generateCards:()=>{
         const arr=[1,2,3,4,5,6,7,8];
-        const deck=[...arr,...arr].sort(() => Math.random-0.8).map((value,ind)=>({
+        const deck=[...arr,...arr].sort(() => Math.random()-0.8).map((value,ind)=>({
             id:ind,
             value,
             isFlipped:false,
@@ -22,8 +23,9 @@ export const useHelperStore=create((set,get)=>({
     },
 
     handleFlip:(index)=>{
+        if(get().game!=="playing") return;
         const card=get().cards[index];
-        if(get().flipped.length===2 || card.isFlipped || card.isMatched) return;
+        if((get().flipped).length===2 || card.isFlipped || card.isMatched) return;
         
         const newCards=get().cards;
         newCards[index].isFlipped=true;
@@ -62,12 +64,24 @@ export const useHelperStore=create((set,get)=>({
     },
 
     startTimer:()=>{
-        let timer=0
-        if(get().game==="playing"){
-            timer=setInterval(() => {
-                set({ timer: get().timer+1 });
-            }, 1000);
-        }
-        return ()=>clearInterval();
+        if(get().intervalId) return;
+        
+        const id=setInterval(() => {
+            const currentTime=get().timer;
+            if(currentTime>0){
+                set({ timer: currentTime-1 });
+            }
+            else{
+                clearInterval();
+                set({ intervalId: null, game: "over" });
+            }
+        }, 1000);
+
+        set({ intervalId: id });
+    },
+
+    pauseTimer:()=>{
+        clearInterval(get().intervalId);
+        set({ intervalId: null, game:"paused" });
     }
 }))

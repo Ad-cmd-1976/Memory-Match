@@ -8,14 +8,12 @@ function formatTime(time){
 }
 
 function App() {
-  const { cards, generateCards, handleFlip, moves, best, game, timer, setGame, startTimer, resetTimerAndMoves }=useHelperStore();
+  const { cards, generateCards, handleFlip, moves, best, game, timer, setGame, startTimer, resetTimerAndMoves, pauseTimer }=useHelperStore();
+
   useEffect(()=>{
     generateCards();
-    startTimer();
   },[]);
-  useEffect(()=>{
-    startTimer();
-  },[game]);
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white">
       
@@ -23,18 +21,35 @@ function App() {
         <div>{`Moves: ${moves}`}</div>
         <div>{`Time: ${formatTime(timer)}`}</div>
         <div>{`Best: ${best==0? "-": best}`}</div>
-        <button className="px-3 py-1 bg-gray-700 rounded" onClick={() => setGame("paused")}>
-          Pause
-        </button>
+        { (game==="idle" || game==="paused") ?(
+          <button 
+          className='px-3 py-1 bg-gray-700 rounded' 
+          onClick={()=>{
+            setGame("playing");
+            startTimer();}
+          }
+          >
+            Start
+          </button>
+        ) : (
+          <button 
+          className="px-3 py-1 bg-gray-700 rounded" 
+          onClick={() =>{
+            setGame("paused");
+            pauseTimer();
+          }}>
+            Pause
+          </button>
+        )}
       </div>
 
 
-      { game==="won" ? (
+      { (game==="won" || timer==0) ? (
         <div className='absolute inset-0 flex items-center justify-center bg/black/70'>
           <div className="p-6 bg-gray-800 rounded-lg text-center">
-            <h2 className="text-2xl mb-4">You Win!</h2>
+            <h2 className="text-2xl mb-4">{timer===0? "Game Over" : "You Win!"}</h2>
             <p className="mb-2">Moves: {moves}</p>
-            <p className="mb-4">Best: {best} moves</p>
+            <p className="mb-4">Best: {best===0? "-" : best}</p>
             <button className="px-4 py-2 bg-green-600 rounded hover:bg-green-700"
               onClick={() => {
                 generateCards();
