@@ -11,7 +11,10 @@ export const useHelperStore=create((set,get)=>({
     intervalId: null,
     setDifficulty: (state)=>set({ difficulty: state }),
     setGame: (state)=>set({ game: state}),
-    resetTimerAndMoves: ()=>set({ timer: 30, moves:0 }),
+    resetTimerAndMoves: ()=>{
+        clearInterval(get().intervalId)
+        set({ timer: 30, moves:0, intervalId: null });
+    },
 
     generateCards:()=>{
         const obj={
@@ -62,7 +65,9 @@ export const useHelperStore=create((set,get)=>({
 
     isWon:(cards)=>{
         if(cards.every(card=>card.isMatched)){
-            set({ game: "won" });
+            clearInterval(get().intervalId);
+            set({ game: "won", intervalId: null });
+
             const moves=get().moves;
             if(moves<get().best || get().best==0){
                 set({ best: moves });
@@ -72,7 +77,7 @@ export const useHelperStore=create((set,get)=>({
     },
 
     startTimer:()=>{
-        if(get().intervalId) return;
+        if(get().intervalId!=null) return;
         
         const id=setInterval(() => {
             const currentTime=get().timer;
