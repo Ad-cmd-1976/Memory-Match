@@ -5,8 +5,10 @@ export const useHelperStore=create((set,get)=>({
     flipped:[],
     moves:0,
     timer:0,
-    best:0,
+    best: 0,
     game: "idle",
+    setGame: (state)=>set({ game: state}),
+    resetTimerAndMoves: ()=>set({ timer: 0, moves:0 }),
 
     generateCards:()=>{
         const arr=[1,2,3,4,5,6,7,8];
@@ -52,10 +54,20 @@ export const useHelperStore=create((set,get)=>({
         if(cards.every(card=>card.isMatched)){
             set({ game: "won" });
             const moves=get().moves;
-            if(moves+1<get().best){
-                set({ best: moves+1 });
-                localStorage.setItem("Best", get().moves+1);
+            if(moves<get().best || get().best==0){
+                set({ best: moves });
+                localStorage.setItem("Best", get().moves);
             }
         }
+    },
+
+    startTimer:()=>{
+        let timer=0
+        if(get().game==="playing"){
+            timer=setInterval(() => {
+                set({ timer: get().timer+1 });
+            }, 1000);
+        }
+        return ()=>clearInterval();
     }
 }))
