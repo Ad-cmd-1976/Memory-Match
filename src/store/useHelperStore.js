@@ -13,8 +13,8 @@ export const useHelperStore=create((set,get)=>({
     setDifficulty: (state)=>set({ difficulty: state }),
     setGame: (state)=>set({ game: state}),
     resetTimerAndMoves: ()=>{
-        clearInterval(get().intervalId)
-        set({ timer: 30, moves:0, intervalId: null });
+        if(get().intervalId) clearInterval(get().intervalId)
+        set({ timer: 30, moves:0, intervalId: null, game: "idle" });
     },
 
     generateCards:()=>{
@@ -93,7 +93,7 @@ export const useHelperStore=create((set,get)=>({
                 set({ timer: currentTime-1 });
             }
             else{
-                clearInterval();
+                clearInterval(get().intervalId);
                 set({ intervalId: null, game: "over" });
             }
         }, 1000);
