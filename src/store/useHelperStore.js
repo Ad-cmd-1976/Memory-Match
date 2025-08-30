@@ -5,15 +5,23 @@ export const useHelperStore=create((set,get)=>({
     flipped:[],
     moves:0,
     timer: 30,
+    difficulty:"Easy",
     best: 0,
     game: "idle",
     intervalId: null,
+    setDifficulty: (state)=>set({ difficulty: state }),
     setGame: (state)=>set({ game: state}),
     resetTimerAndMoves: ()=>set({ timer: 30, moves:0 }),
 
     generateCards:()=>{
-        const arr=[1,2,3,4,5,6,7,8];
-        const deck=[...arr,...arr].sort(() => Math.random()-0.8).map((value,ind)=>({
+        const obj={
+            "Easy": [1,2,3,4],
+            "Medium":[1,2,3,4,5,6],
+            "Hard":[1,2,3,4,5,6,7,8]
+        };
+        const diff=get().difficulty;
+        const arr=obj[diff];
+        const deck=[...arr,...arr].sort(() => Math.random()-0.5).map((value,ind)=>({
             id:ind,
             value,
             isFlipped:false,

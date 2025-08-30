@@ -8,11 +8,11 @@ function formatTime(time){
 }
 
 function App() {
-  const { cards, generateCards, handleFlip, moves, best, game, timer, setGame, startTimer, resetTimerAndMoves, pauseTimer }=useHelperStore();
+  const { cards, generateCards, handleFlip, moves, best, game, timer, setGame, startTimer, resetTimerAndMoves, pauseTimer, setDifficulty, difficulty }=useHelperStore();
 
   useEffect(()=>{
     generateCards();
-  },[]);
+  },[difficulty]);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white">
@@ -21,6 +21,11 @@ function App() {
         <div>{`Moves: ${moves}`}</div>
         <div>{`Time: ${formatTime(timer)}`}</div>
         <div>{`Best: ${best==0? "-": best}`}</div>
+        <select className='pl-2 pr-5 py-2 bg-gray-700 rounded' onChange={(e)=>setDifficulty(e.target.value)}>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
         { (game==="idle" || game==="paused") ?(
           <button 
           className='px-3 py-1 bg-gray-700 rounded' 
