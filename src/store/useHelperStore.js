@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import flipSoundFile from "../assets/flip.mp3";
 
 export const useHelperStore=create((set,get)=>({
     cards:[],
@@ -33,11 +34,18 @@ export const useHelperStore=create((set,get)=>({
         set({ cards:deck });
     },
 
+    playFlipSound:()=>{
+        const audio = new Audio(flipSoundFile);
+        audio.volume = 0.5; 
+        audio.play();
+    },
+
     handleFlip:(index)=>{
         if(get().game!=="playing") return;
         const card=get().cards[index];
         if((get().flipped).length===2 || card.isFlipped || card.isMatched) return;
         
+        get().playFlipSound();
         const newCards=get().cards;
         newCards[index].isFlipped=true;
         set({ cards: newCards });
