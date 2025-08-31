@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useHelperStore } from './store/useHelperStore.js';
-import { motion } from 'framer-motion';
 import CardContainer from './component/CardContainer.jsx';
 import Restart from './component/Restart.jsx';
 
@@ -21,7 +20,7 @@ function App() {
   },[difficulty]);
 
   let Best=JSON.parse(localStorage.getItem("Best")) || { "Easy": 0, "Medium": 0, "Hard": 0 };
-  
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white">
       
@@ -34,7 +33,7 @@ function App() {
 
         <div className="flex items-center gap-3">
           <select
-            className="pl-2 pr-5 py-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="pl-2 pr-5 py-2 bg-gray-700 rounded ring-2 ring-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             onChange={(e) => setDifficulty(e.target.value)}
           >
             <option value="Easy">Easy</option>
@@ -44,7 +43,7 @@ function App() {
 
           {game === "idle" || game === "paused" ? (
             <button
-              className="px-3 py-1 bg-gray-700 hover:bg-gray-600 hover:scale-105 transition-all ease-in-out rounded"
+              className="px-3 py-1 bg-gray-700 hover:bg-gray-600 hover:scale-105 transition-all ease-in-out rounded ring-2 ring-blue-500"
               onClick={() => {
                 setGame("playing");
                 startTimer();

@@ -1,5 +1,9 @@
 import { create } from "zustand";
 import flipSoundFile from "../assets/flip.mp3";
+import startSoundFile from "../assets/start.wav";
+import restartSoundClip from "../assets/restart.wav";
+import gameoverSoundClip from "../assets/over.wav";
+import winSoundClip from "../assets/win.wav";
 
 export const useHelperStore=create((set,get)=>({
     cards:[],
@@ -43,7 +47,7 @@ export const useHelperStore=create((set,get)=>({
         audio.volume = 0.5; 
         audio.play();
     },
-
+    
     handleFlip:(index)=>{
         if(get().game!=="playing") return;
         const card=get().cards[index];
@@ -74,11 +78,18 @@ export const useHelperStore=create((set,get)=>({
             }
         }
     },
+    
+    playWinSound:()=>{
+        const audio = new Audio(winSoundClip);
+        audio.volume = 0.5; 
+        audio.play();
+    },
 
     isWon:(cards)=>{
         if(cards.every(card=>card.isMatched)){
             clearInterval(get().intervalId);
             set({ game: "won", intervalId: null });
+            get().playWinSound();
 
             const moves=get().moves;
             const diff=get().difficulty;
@@ -91,9 +102,21 @@ export const useHelperStore=create((set,get)=>({
         }
     },
 
+    playStartSound:()=>{
+        const audio=new Audio(startSoundFile);
+        audio.volume=0.5,
+        audio.play();
+    },
+
+    playGameOverSound:()=>{
+        const audio=new Audio(gameoverSoundClip);
+        audio.volume=0.5;
+        audio.play();
+    },
+
     startTimer:()=>{
         if(get().intervalId!=null) return;
-        
+        get().playStartSound();
         const id=setInterval(() => {
             const currentTime=get().timer;
             if(currentTime>0){
@@ -109,7 +132,14 @@ export const useHelperStore=create((set,get)=>({
     },
 
     pauseTimer:()=>{
+        get().playStartSound();
         clearInterval(get().intervalId);
         set({ intervalId: null, game:"paused" });
+    },
+
+    playRestartSound:()=>{
+        const audio=new Audio(restartSoundClip);
+        audio.volume=0.5;
+        audio.play();
     }
 }))
