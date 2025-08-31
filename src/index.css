@@ -1,6 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html, body {
+  overflow-x: hidden;
+}
+
 .perspective {
   perspective: 1000px;
 }
