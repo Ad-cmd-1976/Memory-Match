@@ -12,14 +12,16 @@ function formatTime(time){
 
 function App() {
   const { generateCards, moves, game, timer, setGame, startTimer, pauseTimer, setDifficulty, difficulty, intervalId, resetTimerAndMoves }=useHelperStore();
-
+  
   useEffect(()=>{
     generateCards();
     if(intervalId!=null) clearInterval(intervalId);
     setGame("idle");
     resetTimerAndMoves();
   },[difficulty]);
-  let Best=JSON.parse(localStorage.getItem("Best"));
+
+  let Best=JSON.parse(localStorage.getItem("Best")) || { "Easy": 0, "Medium": 0, "Hard": 0 };
+  
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white">
       
