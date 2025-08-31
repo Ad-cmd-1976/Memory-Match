@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useHelperStore } from './store/useHelperStore.js';
-import Cards from './component/Cards.jsx';
+import { motion } from 'framer-motion';
+import CardContainer from './component/CardContainer.jsx';
 import Restart from './component/Restart.jsx';
-import RestartButton from './component/RestartButton.jsx';
 
 function formatTime(time){
   const minutes=String(Math.floor(time/60)).padStart(2, "0");
@@ -11,7 +11,7 @@ function formatTime(time){
 }
 
 function App() {
-  const { generateCards, moves, best, game, timer, setGame, startTimer, pauseTimer, setDifficulty, difficulty, intervalId, resetTimerAndMoves }=useHelperStore();
+  const { generateCards, moves, game, timer, setGame, startTimer, pauseTimer, setDifficulty, difficulty, intervalId, resetTimerAndMoves }=useHelperStore();
 
   useEffect(()=>{
     generateCards();
@@ -19,7 +19,7 @@ function App() {
     setGame("idle");
     resetTimerAndMoves();
   },[difficulty]);
-
+  let Best=JSON.parse(localStorage.getItem("Best"));
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white">
       
@@ -27,12 +27,12 @@ function App() {
         <div className="flex items-center gap-6">
           <span>Moves: {moves}</span>
           <span>Time: {formatTime(timer)}</span>
-          <span>Best: {best === 0 ? "-" : best}</span>
+          <span>Best: {Best[difficulty] === 0 ? "-" : Best[difficulty]}</span>
         </div>
 
         <div className="flex items-center gap-3">
           <select
-            className="pl-2 pr-5 py-2 bg-gray-700 rounded"
+            className="pl-2 pr-5 py-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             onChange={(e) => setDifficulty(e.target.value)}
           >
             <option value="Easy">Easy</option>
@@ -42,7 +42,7 @@ function App() {
 
           {game === "idle" || game === "paused" ? (
             <button
-              className="px-3 py-1 bg-gray-700 rounded"
+              className="px-3 py-1 bg-gray-700 hover:bg-gray-600 hover:scale-105 transition-all ease-in-out rounded"
               onClick={() => {
                 setGame("playing");
                 startTimer();
@@ -52,7 +52,7 @@ function App() {
             </button>
           ) : (
             <button
-              className="px-3 py-1 bg-gray-700 rounded"
+              className="px-3 py-1 bg-gray-700 hover:bg-gray-600 hover:scale-105 transition-all ease-in-out rounded"
               onClick={() => {
                 setGame("paused");
                 pauseTimer();
@@ -65,16 +65,7 @@ function App() {
       </div>
 
 
-      { (game==="won" || timer==0) ? (
-        <Restart/>
-      ): (
-        <div className='flex flex-col border border-gray-700 rounded-lg bg-gray-800 w-full max-w-3xl pb-3'>
-          <Cards />
-          <div className='flex justify-center'>
-            <RestartButton />  
-          </div>
-         </div> 
-      )}
+      { (game==="won" || timer==0) ? (<Restart/>) : (<CardContainer/>)}
     </div>
   );
 }

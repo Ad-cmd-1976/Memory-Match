@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useHelperStore } from "../store/useHelperStore";
- // <-- put your sound file in src/assets
 
 const Cards = () => {
   const { cards, handleFlip } = useHelperStore();
@@ -10,7 +9,7 @@ const Cards = () => {
       {cards.map((card, index) => (
         <div
           key={card.id}
-          className="w-20 h-28 perspective cursor-pointer"
+          className="w-20 h-28 perspective cursor-pointer overflow-hidden relative rounded-lg"
           onClick={() => handleFlip(index)}
         >
           <motion.div
@@ -22,10 +21,23 @@ const Cards = () => {
               ?
             </div>
 
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: ["-100%", "100%"] }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType:  "reverse",
+                ease: "linear",
+              }}
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none"
+            />
+
             <div className="absolute inset-0 flex items-center justify-center bg-pink-500 rounded-lg text-2xl font-bold backface-hidden rotate-y-180">
               {card.value}
             </div>
           </motion.div>
+
         </div>
       ))}
     </div>

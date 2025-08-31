@@ -7,7 +7,11 @@ export const useHelperStore=create((set,get)=>({
     moves:0,
     timer: 30,
     difficulty:"Easy",
-    best: 0,
+    best: {
+        "Easy":0,
+        "Medium":0,
+        "Hard":0
+    },
     game: "idle",
     intervalId: null,
     setDifficulty: (state)=>set({ difficulty: state }),
@@ -77,9 +81,12 @@ export const useHelperStore=create((set,get)=>({
             set({ game: "won", intervalId: null });
 
             const moves=get().moves;
-            if(moves<get().best || get().best==0){
-                set({ best: moves });
-                localStorage.setItem("Best", get().moves);
+            const diff=get().difficulty;
+            const newbest={...get().best};
+            if(moves<newbest[diff] || newbest[diff]==0){
+                newbest[diff]=moves;
+                set({ best: newbest });
+                localStorage.setItem("Best", JSON.stringify(newbest));
             }
         }
     },
