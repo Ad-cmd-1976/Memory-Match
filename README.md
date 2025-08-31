@@ -47,10 +47,10 @@ To set up this project locally, follow these steps:
 
 ```sh
 # 1. Clone the repository into your desired directory
-git clone https://github.com/Ad-cmd-1976/memory-match.git
+git clone https://github.com/Ad-cmd-1976/Memory-Match.git
 
 # 2. Navigate into the project folder
-cd memory-match
+cd Memory-Match
 
 # 3. Install dependencies
 npm install
