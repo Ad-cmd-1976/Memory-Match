@@ -15,12 +15,9 @@ Memory Match is a simple yet engaging card-flipping game where players test thei
 
 ---
 
-## 🎬 Demo Video  
+## 🎬 Demo Video
 
-<video width="600" controls>
-  <source src="demo/Demo-Memory-Match.mp4" type="video/mp4">
-  Your browser does not support the video tag. You can [click here to view the demo video](demo/Demo-Memory-Match.mp4).
-</video>  
+You can [watch the demo video here](demo/Demo-Memory-Match.mp4).
 
 ---
 
@@ -41,16 +38,6 @@ Memory Match is a simple yet engaging card-flipping game where players test thei
 - **Frontend:** React, TailwindCSS, Framer Motion  
 - **State Management:** Zustand  
 - **Deployment:** Vercel  
-
----
-
-## 🔮 Future Enhancements  
-
-- **Difficulty Levels** → Easy, Medium, Hard modes with different card counts.  
-- **Leaderboard** → Track high scores & fastest times.  
-- **Multiplayer Mode** → Play with friends in real-time.  
-- **Custom Themes** → Card skins (animals, emojis, icons, etc.).  
-- **Progressive Web App (PWA)** → Play offline anywhere.  
 
 ---
 
